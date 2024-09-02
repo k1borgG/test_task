@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  app:
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+      - ELASTICSEARCH_URLS=http://elasticsearch:9200
+    networks:
+      - es-network
+
+  elasticsearch:
+    image: elasticsearch:8.8.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - es-network
+
+networks:
+  es-network:
+    driver: bridge
